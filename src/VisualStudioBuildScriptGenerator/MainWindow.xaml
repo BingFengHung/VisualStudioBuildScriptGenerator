@@ -6,7 +6,27 @@
         xmlns:local="clr-namespace:VisualStudioBuildScriptGenerator"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="方案組態"/>
+                <ComboBox ItemsSource="{Binding Configurations}"
+                          SelectedItem="{Binding ConfigurationSelected}"
+                          DisplayMemberPath="Name" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="方案平台"/>
+                <ComboBox ItemsSource="{Binding Platforms}"
+                          SelectedItem="{Binding PlatformSelected}"
+                          DisplayMemberPath="Name" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
 </Window>
