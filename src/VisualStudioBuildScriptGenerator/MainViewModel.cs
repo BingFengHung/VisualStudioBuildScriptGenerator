@@ -33,5 +33,9 @@ namespace VisualStudioBuildScriptGenerator
         public OptionModel ConfigurationSelected { get; set; }
 
         public OptionModel PlatformSelected { get; set; }
+
+        public ObservableCollection<string> FilesCopyPath { get; set; } = new ObservableCollection<string>();
+
+        public string ScriptEdit { get; set; }
     }
 }
