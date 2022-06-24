@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace VisualStudioBuildScriptGenerator
 {
-    class SelectFilePathViewModel : ViewModelBase
+    class SelectFilePathViewModel : ViewModelBase, IDialog
     {
         private Window _window;
 
@@ -52,7 +52,7 @@ namespace VisualStudioBuildScriptGenerator
                 if (result == DialogResult.OK)
                 {
 
-                    SourceFilePath = dialog.SelectedPath;
+                    Destination = dialog.SelectedPath;
                 }
             }
         }
