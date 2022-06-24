@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Ookii;
 
 namespace VisualStudioBuildScriptGenerator
 {
@@ -45,16 +46,23 @@ namespace VisualStudioBuildScriptGenerator
 
         private void GetDestinationCommandExecute(object parameter)
         {
-            using (var dialog = new FolderBrowserDialog())
+            var ookiiDialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
+
+            if (ookiiDialog.ShowDialog() == true)
             {
-                DialogResult result = dialog.ShowDialog();
-
-                if (result == DialogResult.OK)
-                {
-
-                    Destination = dialog.SelectedPath;
-                }
+                Destination = ookiiDialog.SelectedPath;
             }
+
+            //using (var dialog = new FolderBrowserDialog())
+            //{
+            //    DialogResult result = dialog.ShowDialog();
+
+            //    if (result == DialogResult.OK)
+            //    {
+
+            //        Destination = dialog.SelectedPath;
+            //    }
+            //}
         }
     }
 }
