@@ -60,11 +60,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\DelegateLoadedAction.cs" />
+    <Compile Include="AttachedProperties\LoadedBindings.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\IsEnabledConverter.cs" />
-    <Compile Include="ILoadAction.cs" />
+    <Compile Include="Models\FromToPathModel.cs" />
+    <Compile Include="AttachedProperties\ILoadAction.cs" />
     <Compile Include="Models\OptionModel.cs" />
-    <Compile Include="ViewModelBase.cs" />
+    <Compile Include="Frameworks\ViewModelBase.cs" />
     <Compile Include="ViewModels\SelectFilePathViewModel.cs" />
     <Compile Include="Views\IDialog.cs" />
     <Compile Include="Views\SelectFilePathView.xaml.cs">
@@ -78,7 +81,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
