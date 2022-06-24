@@ -92,8 +92,8 @@
                      Text="{Binding ScriptEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Button Content="腳本預覽" Click="{Binding ScriptPreviewCommadn}"/>
-                <Button Content="產出" Click="{Binding OutputCommand}"/>
+                <Button Content="腳本預覽" Command="{Binding ScriptPreviewCommadn}"/>
+                <Button Content="產出" Command="{Binding OutputCommand}"/>
             </StackPanel>
         </Grid>
     </Grid>
