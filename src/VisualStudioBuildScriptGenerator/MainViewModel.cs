@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 
 namespace VisualStudioBuildScriptGenerator
 {
@@ -37,5 +38,18 @@ namespace VisualStudioBuildScriptGenerator
         public ObservableCollection<string> FilesCopyPath { get; set; } = new ObservableCollection<string>();
 
         public string ScriptEdit { get; set; }
+
+        public ICommand AddCopyPathCommand => new RelayCommand(AddCopyPathCommandExecute);
+
+        private void AddCopyPathCommandExecute(object parameter)
+        {
+            SelectFilePathView dialog = new SelectFilePathView();
+            if (dialog.ShowDialog() == true)
+            {
+                var sourceFilePath = (dialog.DataContext as IDialog).SourceFilePath;
+                var destinationPath = (dialog.DataContext as IDialog).SourceFilePath;
+                FilesCopyPath.Add($"{sourceFilePath}, {destinationPath}");
+            }
+        }
     }
 }

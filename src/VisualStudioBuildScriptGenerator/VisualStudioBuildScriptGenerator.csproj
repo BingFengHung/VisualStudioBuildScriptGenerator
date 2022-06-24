@@ -66,6 +66,7 @@
     <Compile Include="Models\OptionModel.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="ViewModels\SelectFilePathViewModel.cs" />
+    <Compile Include="Views\IDialog.cs" />
     <Compile Include="Views\SelectFilePathView.xaml.cs">
       <DependentUpon>SelectFilePathView.xaml</DependentUpon>
     </Compile>

@@ -5,56 +5,74 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VisualStudioBuildScriptGenerator"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Title="SelectFilePathView"
         local:LoadedBindings.LoadedEnabled="True"
-        local:LoadedBindings.LoadedAction="{Binding LoadedAction}">
+        local:LoadedBindings.LoadedAction="{Binding LoadedAction}"
+        Width="350" Height="200">
     <Window.DataContext>
         <local:SelectFilePathViewModel/>
     </Window.DataContext>
 
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Vertical">
-            <TextBlock Text="來源檔案"/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding SourceFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Content="..." Grid.Column="1"/>
-            </Grid>
-        </StackPanel>
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
 
-        <StackPanel Orientation="Vertical">
-            <TextBlock Text="目的地"/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Content="..." Grid.Column="1"/>
-            </Grid>
-        </StackPanel>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="MinWidth" Value="30"/>
+        </Style>
+    </Window.Resources>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="確定">
-                <Button.IsEnabled>
-                    <MultiBinding Converter="{local:IsEnabledConverter}">
-                        <Binding Path="SourceFilePath"/>
-                        <Binding Path="Destination"/>
-                    </MultiBinding>
-                </Button.IsEnabled>
-            </Button>
-            <Button Content="取消"/>
-            <TextBlock>
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0} + {1}">
-                        <Binding Path="Name" />
-                        <Binding Path="ID" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
+    <Grid>
+        <StackPanel Orientation="Vertical" 
+                    VerticalAlignment="Center"
+                    Margin="5, 0">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="來源檔案"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding SourceFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="..." Grid.Column="1"
+                        Command="{Binding GetSourceFilePathCommand}"/>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="目的地"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="..." Grid.Column="1"
+                        Command="{Binding GetDestinationCommand}"/>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="確定" Command="{Binding ConfirmCommand}">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{local:IsEnabledConverter}">
+                            <Binding Path="SourceFilePath"/>
+                            <Binding Path="Destination"/>
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} + {1}">
+                            <Binding Path="Name" />
+                            <Binding Path="ID" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </Grid>
 </Window>
