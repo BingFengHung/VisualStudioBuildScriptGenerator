@@ -11,6 +11,11 @@ namespace VisualStudioBuildScriptGenerator
     {
         public MainViewModel()
         {
+            VisualStudios = new ObservableCollection<OptionModel>
+            {
+                new OptionModel{Name = "2019", Value = "2019"},
+                new OptionModel{Name = "2022", Value = "2022"},
+            };
             Configurations = new ObservableCollection<OptionModel>
             {
                 new OptionModel{Name = "Debug", Value = "Debug"},
@@ -19,10 +24,12 @@ namespace VisualStudioBuildScriptGenerator
 
             Platforms = new ObservableCollection<OptionModel>
             {
-                new OptionModel{Name = "x86", Value = "x64"},
+                new OptionModel{Name = "x86", Value = "x86"},
                 new OptionModel{Name = "x64", Value = "x64"},
             };
 
+
+            VisualStudioSelected = VisualStudios[0];
             ConfigurationSelected = Configurations[0];
             PlatformSelected = Platforms[0];
 
@@ -34,9 +41,12 @@ namespace VisualStudioBuildScriptGenerator
             };
         }
 
+        public ObservableCollection<OptionModel> VisualStudios { get; set; }
         public ObservableCollection<OptionModel> Configurations { get; set; }
 
         public ObservableCollection<OptionModel> Platforms { get; set; }
+
+        public OptionModel VisualStudioSelected { get; set; }
 
         public OptionModel ConfigurationSelected { get; set; }
 
@@ -52,7 +62,14 @@ namespace VisualStudioBuildScriptGenerator
 
         public ICommand GetSlnNameCommand => new RelayCommand(GetSlnNameCommandExecute);
 
+        public ICommand SelectedFilePathDeleteCommand => new RelayCommand(SelectedFilePathDeleteCommandExecute);
+
         public string SlnName { get; set; }
+
+        private void SelectedFilePathDeleteCommandExecute(object parameter)
+        {
+            FilesCopyPath.Remove((FromToPathModel)parameter);
+        }
 
         private void GetSlnNameCommandExecute(object parameter)
         {
@@ -67,7 +84,41 @@ namespace VisualStudioBuildScriptGenerator
             }
         }
 
-        private string CreateScript()
+        private string CreateMSBuildScript()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (VisualStudioSelected.Name == "2019")
+            {
+                sb.AppendLine($@"SET my_path=C:\Program Files (x86)\Microsoft Visual Studio\2019");
+                sb.AppendLine($@"SET msbuild_path=MSBuild\Current\Bin\MSBuild.exe");
+                sb.AppendLine($@"SET my_community=""%my_path%\Community\%msbuild_path%""");
+                sb.AppendLine($@"SET my_professional=""%my_path%\Professional\%msbuild_path%""");
+                sb.AppendLine($@"SET my_enterprise=""%my_path%\Enterprise\%msbuild_path%""");
+                sb.AppendLine();
+                sb.AppendLine($@"IF EXIST %my_community% (%my_community% ""{SlnName}"" /p:Configuration={ConfigurationSelected.Value} /p:Platform={PlatformSelected.Value}");
+                sb.AppendLine($@") ELSE IF EXIST %my_professional% (%my_professional% ""{SlnName}"" /p:Configuration={ConfigurationSelected.Value} /p:Platform={PlatformSelected.Value}");
+                sb.AppendLine($@") ELSE IF EXIST %my_enterprise% (%my_enterprise% ""{SlnName}"" /p:Configuration={ConfigurationSelected.Value} /p:Platform={PlatformSelected.Value}");
+                sb.AppendLine($@")");
+            }
+            else
+            {
+                sb.AppendLine($@"SET my_path=C:\Program Files\Microsoft Visual Studio\2022");
+                sb.AppendLine($@"SET msbuild_path=MSBuild\Current\Bin\MSBuild.exe");
+                sb.AppendLine($@"SET my_community=""%my_path%\Community\%msbuild_path%""");
+                sb.AppendLine($@"SET my_professional=""%my_path%\Professional\%msbuild_path%""");
+                sb.AppendLine($@"SET my_enterprise=""%my_path%\Enterprise\%msbuild_path%""");
+                sb.AppendLine();
+                sb.AppendLine($@"IF EXIST %my_community% (%my_community% ""{SlnName}"" /p:Configuration={ConfigurationSelected.Value} /p:Platform={PlatformSelected.Value}");
+                sb.AppendLine($@") ELSE IF EXIST %my_professional% (%my_professional% ""{SlnName}"" /p:Configuration={ConfigurationSelected.Value} /p:Platform={PlatformSelected.Value}");
+                sb.AppendLine($@") ELSE IF EXIST %my_enterprise% (%my_enterprise% ""{SlnName}"" /p:Configuration={ConfigurationSelected.Value} /p:Platform={PlatformSelected.Value}");
+                sb.AppendLine($@")");
+            }
+
+            return sb.ToString();
+        }
+
+        private string CreateFileCopyScript()
         {
             StringBuilder sb = new StringBuilder();
 
@@ -76,7 +127,18 @@ namespace VisualStudioBuildScriptGenerator
                 sb.AppendLine($@"XCOPY ""{file.SourceFilePath}"" ""{file.DestinationFolderPath}"" /I /Y");
             }
 
-            sb.AppendLine($@"""C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe"" ""{SlnName}""");
+            return sb.ToString();
+        }
+
+        private string CreateScript()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var fileCopyScript = CreateFileCopyScript();
+            var msBuildScript = CreateMSBuildScript();
+
+            sb.AppendLine(fileCopyScript);
+            sb.AppendLine(msBuildScript);
 
             sb.AppendLine("cmd /k");
 

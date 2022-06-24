@@ -31,6 +31,13 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Visual Studio ："/>
+                    <ComboBox ItemsSource="{Binding VisualStudios}"
+                          SelectedItem="{Binding VisualStudioSelected}"
+                          DisplayMemberPath="Name" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="解決方案"/>
                     <TextBlock Text="{Binding SlnName}"/>
                     <Button Content="..."
@@ -75,7 +82,9 @@
                                     <TextBlock Text=";"/>
                                     <TextBlock Text="{Binding DestinationFolderPath}"/>
                                 </StackPanel>
-                                <Button Content="刪除" Grid.Column="1"/>
+                                <Button Content="刪除" Grid.Column="1"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, Mode=FindAncestor}, Path=DataContext.SelectedFilePathDeleteCommand}"
+                                        CommandParameter="{Binding}"/>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -88,11 +97,21 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <TextBox AcceptsReturn="True" Grid.Row="1"
-                     Text="{Binding ScriptEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="腳本預覽" />
+                    <Button Content="腳本預覽" Command="{Binding ScriptPreviewCommand}"/>
+                </StackPanel>
+                <TextBox AcceptsReturn="True" Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                         Text="{Binding ScriptEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+
 
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Button Content="腳本預覽" Command="{Binding ScriptPreviewCommadn}"/>
                 <Button Content="產出" Command="{Binding OutputCommand}"/>
             </StackPanel>
         </Grid>
