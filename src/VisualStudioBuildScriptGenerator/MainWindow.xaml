@@ -29,6 +29,14 @@
                         <Setter Property="Margin" Value="0, 0, 10, 0"/>
                     </Style>
                 </StackPanel.Resources>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="解決方案"/>
+                    <TextBlock Text="{Binding SlnName}"/>
+                    <Button Content="..."
+                            Command="{Binding GetSlnNameCommand}"/>
+                </StackPanel>
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="方案組態："/>
                     <ComboBox ItemsSource="{Binding Configurations}"
@@ -57,10 +65,18 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding}"/>
-                                <Button Content="刪除"/>
-                            </StackPanel>
+                            <Grid Margin="5, 3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                    <TextBlock Text="{Binding SourceFilePath}"/>
+                                    <TextBlock Text=";"/>
+                                    <TextBlock Text="{Binding DestinationFolderPath}"/>
+                                </StackPanel>
+                                <Button Content="刪除" Grid.Column="1"/>
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -76,7 +92,8 @@
                      Text="{Binding ScriptEdit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Button Content="產出"/>
+                <Button Content="腳本預覽" Click="{Binding ScriptPreviewCommadn}"/>
+                <Button Content="產出" Click="{Binding OutputCommand}"/>
             </StackPanel>
         </Grid>
     </Grid>
