@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -153,6 +154,7 @@ namespace VisualStudioBuildScriptGenerator
             if (File.Exists("build.bat"))
             {
                 System.Windows.MessageBox.Show("Success");
+                OpenFolder(AppDomain.CurrentDomain.BaseDirectory);
             }
             else
             {
@@ -160,6 +162,29 @@ namespace VisualStudioBuildScriptGenerator
             }
 
         }
+
+        private void OpenFolder(string folderPath)
+        {
+            try
+            {
+                if (Directory.Exists(folderPath))
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        Arguments = folderPath,
+                        FileName = "explorer.exe"
+                    };
+
+                    Process.Start(startInfo);
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show(string.Format("{0} Directory does not exist!", folderPath));
+                }
+            }
+            catch { }
+        }
+
         private void AddCopyPathCommandExecute(object parameter)
         {
             SelectFilePathView dialog = new SelectFilePathView();
