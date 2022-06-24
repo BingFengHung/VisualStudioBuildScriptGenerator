@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -60,6 +61,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\IsEnabledConverter.cs" />
+    <Compile Include="ILoadAction.cs" />
     <Compile Include="Models\OptionModel.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="ViewModels\SelectFilePathViewModel.cs" />

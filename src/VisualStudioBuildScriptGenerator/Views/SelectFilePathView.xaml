@@ -5,8 +5,56 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VisualStudioBuildScriptGenerator"
         mc:Ignorable="d"
-        Title="SelectFilePathView" Height="450" Width="800">
-    <Grid>
+        Title="SelectFilePathView"
+        local:LoadedBindings.LoadedEnabled="True"
+        local:LoadedBindings.LoadedAction="{Binding LoadedAction}">
+    <Window.DataContext>
+        <local:SelectFilePathViewModel/>
+    </Window.DataContext>
 
-    </Grid>
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="來源檔案"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding SourceFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Content="..." Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="目的地"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Content="..." Grid.Column="1"/>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="確定">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{local:IsEnabledConverter}">
+                        <Binding Path="SourceFilePath"/>
+                        <Binding Path="Destination"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+            </Button>
+            <Button Content="取消"/>
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} + {1}">
+                        <Binding Path="Name" />
+                        <Binding Path="ID" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
+    </StackPanel>
 </Window>
