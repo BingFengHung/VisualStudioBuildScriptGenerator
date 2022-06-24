@@ -24,6 +24,7 @@ namespace VisualStudioBuildScriptGenerator
 
             Platforms = new ObservableCollection<OptionModel>
             {
+                new OptionModel{Name = "AnyCPU", Value = @"""Any CPU"""},
                 new OptionModel{Name = "x86", Value = "x86"},
                 new OptionModel{Name = "x64", Value = "x64"},
             };
@@ -33,12 +34,7 @@ namespace VisualStudioBuildScriptGenerator
             ConfigurationSelected = Configurations[0];
             PlatformSelected = Platforms[0];
 
-            FilesCopyPath = new ObservableCollection<FromToPathModel>
-            {
-                new FromToPathModel{SourceFilePath = "A", DestinationFolderPath = "B"},
-                new FromToPathModel{SourceFilePath = "C", DestinationFolderPath = "B"},
-                new FromToPathModel{SourceFilePath = "D", DestinationFolderPath = "B"}
-            };
+            FilesCopyPath = new ObservableCollection<FromToPathModel>();
         }
 
         public ObservableCollection<OptionModel> VisualStudios { get; set; }
