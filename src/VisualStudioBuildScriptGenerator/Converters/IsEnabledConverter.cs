@@ -28,9 +28,14 @@ namespace VisualStudioBuildScriptGenerator
 
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (string.IsNullOrEmpty(values[0].ToString()) || string.IsNullOrEmpty(values[1].ToString()))
-                return false;
-            return true;
+            if (values[0] != null && values[1] != null)
+            {
+                if (string.IsNullOrEmpty(values[0].ToString()) || string.IsNullOrEmpty(values[1].ToString()))
+                    return false;
+                return true;
+            }
+
+            return false;
         }
 
         public override object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
