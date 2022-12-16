@@ -11,7 +11,8 @@ namespace VisualStudioBuildScriptGenerator
             typeof(LoadedBindings),
             new PropertyMetadata(false, new PropertyChangedCallback(OnLoadedEnabledPropertyChanged)));
 
-        public static bool GetLoadedEnabled(DependencyObject sender) => (bool)sender.GetValue(LoadedEnabledProperty);
+        public static bool GetLoadedEnabled(DependencyObject sender)
+            => (bool)sender.GetValue(LoadedEnabledProperty);
         public static void SetLoadedEnabled(DependencyObject sender, bool value) => sender.SetValue(LoadedEnabledProperty, value);
 
         private static void OnLoadedEnabledPropertyChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -42,7 +43,8 @@ namespace VisualStudioBuildScriptGenerator
                 typeof(LoadedBindings),
                 new PropertyMetadata(null));
 
-        public static ILoadedAction GetLoadedAction(DependencyObject sender) => (ILoadedAction)sender.GetValue(LoadedActionProperty);
+        public static ILoadedAction GetLoadedAction(DependencyObject sender)
+            => (ILoadedAction)sender.GetValue(LoadedActionProperty);
 
         public static void SetLoadedAction(DependencyObject sender, ILoadedAction value) => sender.SetValue(LoadedActionProperty, value);
     }

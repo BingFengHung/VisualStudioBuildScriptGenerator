@@ -37,8 +37,8 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Text="{Binding SourceFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Content="..." Grid.Column="1"
-                        Command="{Binding GetSourceFilePathCommand}"/>
+                    <Button Content="..." Grid.Column="1" 
+                            Command="{Binding GetSourceFilePathCommand}"/>
                 </Grid>
             </StackPanel>
 

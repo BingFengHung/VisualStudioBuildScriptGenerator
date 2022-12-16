@@ -59,6 +59,12 @@
                 </StackPanel>
             </StackPanel>
 
+            <StackPanel Orientation="Vertical">
+                <Button Content="設定專案根目錄"
+                        Command="{Binding SetProjectRootPathCommand}"/>
+                <TextBox Text="{Binding ProjectRootPath, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+            </StackPanel>
+
             <Button Content="新增檔案複製路徑"
                     Command="{Binding AddCopyPathCommand}"/>
 
@@ -78,9 +84,9 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Horizontal" Grid.Column="0">
-                                    <TextBlock Text="{Binding SourceFilePath}"/>
+                                    <TextBox Text="{Binding SourceFilePath, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                                     <TextBlock Text=";"/>
-                                    <TextBlock Text="{Binding DestinationFolderPath}"/>
+                                    <TextBox Text="{Binding DestinationFolderPath, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
                                 </StackPanel>
                                 <Button Content="刪除" Grid.Column="1"
                                         Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, Mode=FindAncestor}, Path=DataContext.SelectedFilePathDeleteCommand}"

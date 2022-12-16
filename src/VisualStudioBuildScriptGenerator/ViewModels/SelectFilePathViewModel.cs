@@ -35,11 +35,15 @@ namespace VisualStudioBuildScriptGenerator
         {
             using (var dialog = new OpenFileDialog())
             {
+                dialog.Multiselect = true;
                 DialogResult result = dialog.ShowDialog();
 
                 if (result == DialogResult.OK)
                 {
-                    SourceFilePath = dialog.FileName;
+                    var filesnames = dialog.FileNames;
+
+                    SourceFilePath = string.Join(";", filesnames);
+                    // SourceFilePath = dialog.FileName;
                 }
             }
         }

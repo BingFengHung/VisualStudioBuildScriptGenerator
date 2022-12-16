@@ -53,6 +53,8 @@ namespace VisualStudioBuildScriptGenerator
 
         public string ScriptEdit { get; set; }
 
+        public ICommand SetProjectRootPathCommand => new RelayCommand(SetProjectRootPathExecute);
+
         public ICommand AddCopyPathCommand => new RelayCommand(AddCopyPathCommandExecute);
         public ICommand ScriptPreviewCommand => new RelayCommand(ScriptPreviewCommandExecute);
         public ICommand OutputCommand => new RelayCommand(OutputCommandExecute);
@@ -62,6 +64,8 @@ namespace VisualStudioBuildScriptGenerator
         public ICommand SelectedFilePathDeleteCommand => new RelayCommand(SelectedFilePathDeleteCommandExecute);
 
         public string SlnName { get; set; }
+
+        public string ProjectRootPath { get; set; } = string.Empty;
 
         private void SelectedFilePathDeleteCommandExecute(object parameter)
         {
@@ -191,9 +195,34 @@ namespace VisualStudioBuildScriptGenerator
             if (dialog.ShowDialog() == true)
             {
                 var sourceFilePath = (dialog.DataContext as IDialog).SourceFilePath;
-                var destinationPath = (dialog.DataContext as IDialog).SourceFilePath;
-                FilesCopyPath.Add(
-                    new FromToPathModel { SourceFilePath = sourceFilePath, DestinationFolderPath = destinationPath });
+                var destinationPath = (dialog.DataContext as IDialog).Destination;
+
+                var files = sourceFilePath.Split(';');
+
+                foreach (var file in files)
+                {
+                    string filePath = file;
+                    if (ProjectRootPath != string.Empty)
+                    {
+                        filePath = filePath.Replace(ProjectRootPath, ".");
+                        destinationPath = destinationPath.Replace(ProjectRootPath, ".");
+                    }
+
+                    FilesCopyPath.Add(
+                        new FromToPathModel { SourceFilePath = filePath, DestinationFolderPath = destinationPath });
+                }
+
+            }
+        }
+
+
+        private void SetProjectRootPathExecute(object parameter)
+        {
+            var ookiiDialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
+
+            if (ookiiDialog.ShowDialog() == true)
+            {
+                ProjectRootPath = ookiiDialog.SelectedPath;
             }
         }
     }
