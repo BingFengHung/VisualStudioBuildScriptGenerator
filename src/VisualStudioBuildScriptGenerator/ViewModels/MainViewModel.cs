@@ -125,7 +125,7 @@ namespace VisualStudioBuildScriptGenerator
 
             foreach (var file in FilesCopyPath)
             {
-                sb.AppendLine($@"XCOPY ""{file.SourceFilePath}"" ""{file.DestinationFolderPath}"" /I /Y");
+                sb.AppendLine($@"XCOPY ""{file.SourceFilePath}"" ""{file.DestinationFolderPath}\"" /I /Y");
             }
 
             return sb.ToString();
@@ -139,6 +139,8 @@ namespace VisualStudioBuildScriptGenerator
             var msBuildScript = CreateMSBuildScript();
 
             sb.AppendLine(fileCopyScript);
+            sb.AppendLine("nuget restore");
+            sb.AppendLine("dotnet restore");
             sb.AppendLine(msBuildScript);
 
             sb.AppendLine("cmd /k");
