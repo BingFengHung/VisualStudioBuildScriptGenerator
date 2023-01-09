@@ -1,0 +1,78 @@
+﻿<Window x:Class="VisualStudioBuildScriptGenerator.SelectFilePathView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VisualStudioBuildScriptGenerator"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="SelectFilePathView"
+        local:LoadedBindings.LoadedEnabled="True"
+        local:LoadedBindings.LoadedAction="{Binding LoadedAction}"
+        Width="350" Height="200">
+    <Window.DataContext>
+        <local:SelectFilePathViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="MinWidth" Value="30"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <StackPanel Orientation="Vertical" 
+                    VerticalAlignment="Center"
+                    Margin="5, 0">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="來源檔案"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding SourceFilePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="..." Grid.Column="1" 
+                            Command="{Binding GetSourceFilePathCommand}"/>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="目的地"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="..." Grid.Column="1"
+                        Command="{Binding GetDestinationCommand}"/>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="確定" Command="{Binding ConfirmCommand}">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{local:IsEnabledConverter}">
+                            <Binding Path="SourceFilePath"/>
+                            <Binding Path="Destination"/>
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} + {1}">
+                            <Binding Path="Name" />
+                            <Binding Path="ID" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
