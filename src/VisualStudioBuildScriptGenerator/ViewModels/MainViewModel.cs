@@ -193,7 +193,8 @@ namespace VisualStudioBuildScriptGenerator
 
         private void AddCopyPathCommandExecute(object parameter)
         {
-            SelectFilePathView dialog = new SelectFilePathView();
+            //SelectFilePathView dialog = new SelectFilePathView();
+            FileSelectorView dialog = new FileSelectorView();
             if (dialog.ShowDialog() == true)
             {
                 var sourceFilePath = (dialog.DataContext as IDialog).SourceFilePath;

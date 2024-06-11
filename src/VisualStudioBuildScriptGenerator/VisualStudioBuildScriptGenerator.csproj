@@ -75,13 +75,18 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\DelegateLoadedAction.cs" />
     <Compile Include="AttachedProperties\LoadedBindings.cs" />
+    <Compile Include="AttachedProperties\MouseBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\IsEnabledConverter.cs" />
     <Compile Include="Models\FromToPathModel.cs" />
     <Compile Include="AttachedProperties\ILoadAction.cs" />
     <Compile Include="Models\OptionModel.cs" />
     <Compile Include="Frameworks\ViewModelBase.cs" />
+    <Compile Include="ViewModels\FileSelectorViewModel.cs" />
     <Compile Include="ViewModels\SelectFilePathViewModel.cs" />
+    <Compile Include="Views\FileSelectorView.xaml.cs">
+      <DependentUpon>FileSelectorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\IDialog.cs" />
     <Compile Include="Views\SelectFilePathView.xaml.cs">
       <DependentUpon>SelectFilePathView.xaml</DependentUpon>
@@ -104,6 +109,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\ComboBoxes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FileSelectorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
