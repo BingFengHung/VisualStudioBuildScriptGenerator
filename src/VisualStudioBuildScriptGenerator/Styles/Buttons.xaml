@@ -6,7 +6,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
-                            <Border Background="#2277BB" Margin="0, 5" Padding="10, 6"
+                            <Border x:Name="border" Background="#2277BB" Margin="0, 5" Padding="10, 6"
                                     CornerRadius="5">
                                 <TextBlock Text="{TemplateBinding Content}" 
                                            Foreground="white" 
@@ -15,6 +15,16 @@
                                            VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="ButtonBase.IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value=".5"/>
+                            </Trigger>
+
+                            <Trigger Property="ButtonBase.IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#185687"/>
+                                <Setter TargetName="border" Property="Opacity" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
