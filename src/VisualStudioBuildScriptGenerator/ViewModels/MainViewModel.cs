@@ -228,5 +228,26 @@ namespace VisualStudioBuildScriptGenerator
                 ProjectRootPath = ookiiDialog.SelectedPath;
             }
         }
+
+        public static string GetRelativePath(string fromPath, string toPath)
+        {
+            Uri fromUri = new Uri(AppendDirectorySeparatorChar(fromPath));
+            Uri toUri = new Uri(AppendDirectorySeparatorChar(toPath));
+
+            Uri relativeUri = fromUri.MakeRelativeUri(toUri);
+            string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+            return relativePath.Replace('/', Path.DirectorySeparatorChar);
+        }
+
+        private static string AppendDirectorySeparatorChar(string path)
+        {
+            // If the path is a directory and does not end with a directory separator char, append one.
+            if (!Path.HasExtension(path) && !path.EndsWith(Path.DirectorySeparatorChar.ToString()))
+            {
+                return path + Path.DirectorySeparatorChar;
+            }
+            return path;
+        }
     }
 }
