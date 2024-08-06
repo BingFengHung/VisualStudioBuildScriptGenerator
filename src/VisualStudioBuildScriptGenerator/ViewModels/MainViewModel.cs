@@ -14,6 +14,7 @@ namespace VisualStudioBuildScriptGenerator
         {
             VisualStudios = new ObservableCollection<OptionModel>
             {
+                new OptionModel{Name = "2022", Value = "2022"},
                 new OptionModel{Name = "2019", Value = "2019"},
                 new OptionModel{Name = "2022", Value = "2022"},
             };
@@ -26,6 +27,7 @@ namespace VisualStudioBuildScriptGenerator
             Platforms = new ObservableCollection<OptionModel>
             {
                 new OptionModel{Name = "AnyCPU", Value = @"""Any CPU"""},
+                new OptionModel{Name = "x64", Value = "x64"},
                 new OptionModel{Name = "x86", Value = "x86"},
                 new OptionModel{Name = "x64", Value = "x64"},
             };
@@ -39,6 +41,7 @@ namespace VisualStudioBuildScriptGenerator
         }
 
         public ObservableCollection<OptionModel> VisualStudios { get; set; }
+
         public ObservableCollection<OptionModel> Configurations { get; set; }
 
         public ObservableCollection<OptionModel> Platforms { get; set; }
@@ -56,16 +59,33 @@ namespace VisualStudioBuildScriptGenerator
         public ICommand SetProjectRootPathCommand => new RelayCommand(SetProjectRootPathExecute);
 
         public ICommand AddCopyPathCommand => new RelayCommand(AddCopyPathCommandExecute);
+
         public ICommand ScriptPreviewCommand => new RelayCommand(ScriptPreviewCommandExecute);
+
         public ICommand OutputCommand => new RelayCommand(OutputCommandExecute);
+        public ICommand ResetCommand => new RelayCommand(ResetCommandExecute);
 
         public ICommand GetSlnNameCommand => new RelayCommand(GetSlnNameCommandExecute);
 
         public ICommand SelectedFilePathDeleteCommand => new RelayCommand(SelectedFilePathDeleteCommandExecute);
 
+        public ICommand SetScriptPathCommand => new RelayCommand(SetScriptPathCommandExecute);
+
         public string SlnName { get; set; }
 
+        public string ScriptPath { get; set; } = string.Empty;
+
         public string ProjectRootPath { get; set; } = string.Empty;
+
+        private void SetScriptPathCommandExecute(object parameter)
+        {
+            var ookiiDialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
+
+            if (ookiiDialog.ShowDialog() == true)
+            {
+                ScriptPath = ookiiDialog.SelectedPath;
+            }
+        }
 
         private void SelectedFilePathDeleteCommandExecute(object parameter)
         {
@@ -155,19 +175,31 @@ namespace VisualStudioBuildScriptGenerator
 
         private void OutputCommandExecute(object parameter)
         {
-            File.WriteAllText("build.bat", ScriptEdit);
+            File.WriteAllText(Path.Combine(ScriptPath, "build.bat"), ScriptEdit);
 
             if (File.Exists("build.bat"))
             {
                 System.Windows.MessageBox.Show("Success");
-                OpenFolder(AppDomain.CurrentDomain.BaseDirectory);
+                OpenFolder(ScriptPath);
             }
             else
             {
                 System.Windows.MessageBox.Show("Failed!");
             }
-
         }
+
+        private void ResetCommandExecute(object parameter)
+        {
+            VisualStudioSelected = VisualStudios[0];
+            ConfigurationSelected = Configurations[0];
+            PlatformSelected = Platforms[0];
+
+            FilesCopyPath = new ObservableCollection<FromToPathModel>();
+
+            SlnName = string.Empty;
+            ScriptPath = string.Empty;
+        }
+
 
         private void OpenFolder(string folderPath)
         {
@@ -194,6 +226,7 @@ namespace VisualStudioBuildScriptGenerator
         private void AddCopyPathCommandExecute(object parameter)
         {
             SelectFilePathView dialog = new SelectFilePathView();
+
             if (dialog.ShowDialog() == true)
             {
                 var sourceFilePath = (dialog.DataContext as IDialog).SourceFilePath;
@@ -204,14 +237,18 @@ namespace VisualStudioBuildScriptGenerator
                 foreach (var file in files)
                 {
                     string filePath = file;
-                    if (ProjectRootPath != string.Empty)
-                    {
-                        filePath = filePath.Replace(ProjectRootPath, ".");
-                        destinationPath = destinationPath.Replace(ProjectRootPath, ".");
-                    }
+                    //if (ProjectRootPath != string.Empty)
+                    //{
+                    //    filePath = filePath.Replace(ProjectRootPath, ".");
+                    //    destinationPath = destinationPath.Replace(ProjectRootPath, ".");
+                    //}
+                    string relativeFile = GetRelativePath(ScriptPath, filePath);
+                    string relativeDestinate = GetRelativePath(ScriptPath, destinationPath);
+
+                    //string relativePath = GetRelativePath(filePath, destinationPath);//Path.GetRelativePath(pathB, pathA);
 
                     FilesCopyPath.Add(
-                        new FromToPathModel { SourceFilePath = filePath, DestinationFolderPath = destinationPath });
+                        new FromToPathModel { SourceFilePath = relativeFile, DestinationFolderPath = relativeDestinate });
                 }
 
             }
@@ -226,6 +263,27 @@ namespace VisualStudioBuildScriptGenerator
             {
                 ProjectRootPath = ookiiDialog.SelectedPath;
             }
+        }
+
+        public static string GetRelativePath(string fromPath, string toPath)
+        {
+            Uri fromUri = new Uri(AppendDirectorySeparatorChar(fromPath));
+            Uri toUri = new Uri(AppendDirectorySeparatorChar(toPath));
+
+            Uri relativeUri = fromUri.MakeRelativeUri(toUri);
+            string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+            return relativePath.Replace('/', Path.DirectorySeparatorChar);
+        }
+
+        private static string AppendDirectorySeparatorChar(string path)
+        {
+            // If the path is a directory and does not end with a directory separator char, append one.
+            if (!Path.HasExtension(path) && !path.EndsWith(Path.DirectorySeparatorChar.ToString()))
+            {
+                return path + Path.DirectorySeparatorChar;
+            }
+            return path;
         }
     }
 }

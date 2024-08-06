@@ -75,6 +75,7 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\DelegateLoadedAction.cs" />
     <Compile Include="AttachedProperties\LoadedBindings.cs" />
+    <Compile Include="AttachedProperties\MouseBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\IsEnabledConverter.cs" />
     <Compile Include="Models\FromToPathModel.cs" />
